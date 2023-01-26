@@ -1,0 +1,14 @@
+{
+  "name": "wastenot",
+  "version": "1.0.0",
+  "description": "back end for wastenot mobile app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Syed Faisal Imam",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
