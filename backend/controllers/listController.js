@@ -12,7 +12,7 @@ exports.listAll = function (req, res) {
     list.getAllEntries()
         .then((list) => {
             res.json(list);
-            //  console.log(list);
+            console.log(list);
         })
         .catch((err) => {
             console.log("promise rejected", err);

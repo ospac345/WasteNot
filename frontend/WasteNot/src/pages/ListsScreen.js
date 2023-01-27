@@ -1,12 +1,43 @@
+import {
+    useGetListQuery
+} from '..//redux/slices/listApi';
 
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, FlatList } from 'react-native';
 
-function ListsScreen() {
+
+
+const ListsScreen = () => {
+
+    const { data } = useGetListQuery('');
+    const [list, setList] = useState([]);
+
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            const items = data.map(list => list.items);
+            setList(items[0]);
+        }
+    }, [data]);
+
+    console.log('this log is from Lists Screen', list);
+
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Lists!</Text>
+        <View>
+            <Text>Test Text</Text>
+            <FlatList
+                data={list}
+                keyExtractor={item => item._id}
+                renderItem={({ item }) => (
+                    <View>
+                        <Text>{item.name}</Text>
+                    </View>
+                )}
+            />
         </View>
     );
+
 }
 
 export default ListsScreen;
+
