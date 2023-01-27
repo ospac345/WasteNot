@@ -1,0 +1,1 @@
+{"username":"test@test.com","items":[{"_id":1,"name":"banana","quantity":2,"expiration_date":{"$$date":1698537600000},"category":"fruit","location":"pantry","notes":""},{"_id":2,"name":"apple","quantity":2,"expiration_date":{"$$date":1698537600000},"category":"fruit","location":"pantry","notes":""}],"_id":"F3UF7LQ2bCK4a4Ub"}
