@@ -6,17 +6,11 @@
  */
 
 import React from 'react';
-import LandingPage from './src/pages/LandingPage';
 import MainScreen from './src/pages/MainScreen';
 
+
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
     useColorScheme,
-    View,
 } from 'react-native';
 
 import {
@@ -33,7 +27,11 @@ function App() {
 
     return (
 
-        <><MainScreen /></>
+        <>
+
+            <MainScreen />
+
+        </>
     );
 }
 

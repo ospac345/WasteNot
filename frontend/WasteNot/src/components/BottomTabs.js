@@ -6,15 +6,20 @@ import ProfileScreen from '../pages/ProfileScreen';
 import DonateScreen from '../pages/DonateScreen';
 
 
+
+
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
   return (
+
     <Tab.Navigator
       initialRouteName="Lists"
       screenOptions={{
         tabBarActiveTintColor: '#698834',
+        headerShown: false,
       }}
+
     >
       <Tab.Screen
         name="Lists"
