@@ -9,20 +9,20 @@ function ListsTopFilter(props) {
     const [value, setValue] = useState('myKitchen');
     const [items, setItems] = useState([
         {
-            label: 'My Kitchen (All)', value: 'myKitchen', labelStyle: { color: 'red', fontWeight: 'bold' },
-            icon: () => <MaterialCommunityIcons size={20} name='food-variant' style={ComponentsStyleSheet.listsTopFilterIconMyFridge} />
+            label: 'My Kitchen (All)', value: 'myKitchen',
+            icon: () => <MaterialCommunityIcons size={25} name='food-variant' style={ComponentsStyleSheet.listsTopFilterIcons} />
         },
         {
             label: 'My Pantry', value: 'pantry',
-            icon: () => <MaterialCommunityIcons size={20} name='cupboard' />
+            icon: () => <MaterialCommunityIcons size={25} name='storefront-outline' style={ComponentsStyleSheet.listsTopFilterIcons} />
         },
         {
             label: 'My Fridge', value: 'fridge',
-            icon: () => <MaterialCommunityIcons size={20} name='fridge' />
+            icon: () => <MaterialCommunityIcons size={25} name='fridge' style={ComponentsStyleSheet.listsTopFilterIcons} />
         },
         {
             label: 'My Freezer', value: 'freezer',
-            icon: () => <MaterialCommunityIcons size={20} name='snowflake' />
+            icon: () => <MaterialCommunityIcons size={25} name='snowflake' style={ComponentsStyleSheet.listsTopFilterIcons} />
         }
     ]);
 
@@ -39,7 +39,6 @@ function ListsTopFilter(props) {
                 marginTop: 40,
                 width: 190,
                 alignSelf: 'center',
-                backgroundColor: '#f0ffd7',
                 borderRadius: 30,
                 borderColor: 'transparent',
             }}

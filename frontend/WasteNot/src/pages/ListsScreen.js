@@ -59,7 +59,7 @@ const ListsScreen = () => {
                                 <Text style={ListsStyleSheet.itemName}>{Capitalize(item.name)}</Text>
                                 <Text style={ListsStyleSheet.expirationDays} >Expires in {DaysCalculator(item.expiration_date)} days</Text>
                                 <View style={{ alignItems: "flex-end" }}>
-                                    <MaterialCommunityIcons name="check-circle" />
+                                    <MaterialCommunityIcons style={ListsStyleSheet.listCheckCircleIcon} name="check-circle" size={20} />
                                 </View>
                             </View>
                         )} />
