@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text, Modal, ScrollView, Pressable, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, Modal, Pressable, FlatList } from 'react-native';
 import { useState } from 'react';
 import styles from '../styleSheet/componentsStyleSheet';
 
@@ -70,7 +70,7 @@ const CategoryModal = ({ onSelection }) => {
                                 style={[styles.BottomButton, { marginTop: 20, paddingLeft: 20, paddingRight: 30, paddingLeft: 30, }]}
                                 onPress={() => {
                                     setCategoryModalVisible(!categoryModalVisible);
-                                    // onSelection(category);
+                                    onSelection(category);
                                 }}>
                                 <Text style={styles.buttonText}>Save</Text>
                             </Pressable>

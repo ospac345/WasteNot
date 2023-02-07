@@ -10,7 +10,7 @@ const ComponentsStyleSheet = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 8,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: 'transparent',
         position: 'absolute',
         bottom: 0,
         left: 0,
