@@ -141,7 +141,7 @@ const ItemDetailView = ({ selectedItem, username, onClose }) => {
                             borderTopWidth: 1,
                             borderColor: '#888334',
                         }}>
-                            <CategoryModal onSelection={updateSelectedCategory} />
+                            <CategoryModal onSelection={updateSelectedCategory} selectedCategory={selectedCategory} />
                             <Text style={{ color: '#888334', fontWeight: 'bold' }}>{selectedCategory}</Text>
                         </View>
                         <View style={{

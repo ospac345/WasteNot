@@ -17,6 +17,7 @@ const ListsScreen = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
     const [filteredItems, setFilteredItems] = useState();
+    const [currentSortType, setCurrentSortType] = useState('date');
 
 
     useEffect(() => {
@@ -26,7 +27,8 @@ const ListsScreen = () => {
         }
         setIsLoading(false);
         setUsername(lists[0].username);
-    }, [lists]);
+        filteredList();
+    }, [lists, selectedValue]);
 
     const Capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -39,11 +41,12 @@ const ListsScreen = () => {
 
     const filteredList = () => {
         if (selectedValue === 'myKitchen') {
-            return lists[0].items;
+            setFilteredItems(lists[0].items);
+        } else {
+            setFilteredItems(lists[0].items.filter(item => item.location === selectedValue));
         }
-
-        return lists[0].items.filter(item => item.location === selectedValue);
     };
+
 
     const handleRemoveItems = () => {
         removeItems(username, selectedIds);
@@ -52,15 +55,19 @@ const ListsScreen = () => {
 
     const sortList = (sortBy) => {
         if (sortBy === 'date') {
-            return sortByDate();
+            setFilteredItems([...filteredItems].sort((a, b) => new Date(...a.expiration_date.split('/').reverse()) - new Date(...b.expiration_date.split('/').reverse())));
         } else if (sortBy === 'name') {
-            return sortByName();
+            setFilteredItems([...filteredItems].sort((a, b) => a.name.localeCompare(b.name)));
+        } else if (sortBy === 'added') {
+            setFilteredItems([...filteredItems].sort((a, b) => new Date(...a.added_date.split('/').reverse()) - new Date(...b.added_date.split('/').reverse())));
         }
     };
 
-    let sortedListByDate = filteredList().sort((a, b) => new Date(...a.expiration_date.split('/').reverse()) - new Date(...b.expiration_date.split('/').reverse()));
+    const handleSortTypeChange = (sortBy) => {
+        setCurrentSortType(sortBy);
+        sortList(sortBy);
+    };
 
-    let sortedListByName = filteredList().sort((a, b) => a.name.localeCompare(b.name));
 
 
     return (
@@ -73,8 +80,8 @@ const ListsScreen = () => {
                 <>
                     <ListsTopFilter onValueChange={handleSelectedValue} />
                     <FlatList
-                        data={filteredList()}
-                        keyExtractor={item => item._id}
+                        data={filteredItems}
+                        keyExtractor={item => item.id}
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={{
@@ -111,15 +118,15 @@ const ListsScreen = () => {
 
                                 <View style={{ alignItems: "flex-end" }}>
                                     <TouchableOpacity onPress={() => {
-                                        if (selectedIds.includes(item._id)) {
-                                            setSelectedIds(selectedIds.filter(id => id !== item._id));
+                                        if (selectedIds.includes(item.id)) {
+                                            setSelectedIds(selectedIds.filter(id => id !== item.id));
                                         } else {
-                                            setSelectedIds([...selectedIds, item._id]);
+                                            setSelectedIds([...selectedIds, item.id]);
                                         }
                                     }}>
                                         <MaterialCommunityIcons
                                             style={ListsStyleSheet.listCheckCircleIcon}
-                                            name={selectedIds.includes(item._id) ? "check-circle" : "checkbox-blank-circle-outline"}
+                                            name={selectedIds.includes(item.id) ? "check-circle" : "checkbox-blank-circle-outline"}
                                             size={25}
                                         />
                                     </TouchableOpacity>
@@ -129,7 +136,7 @@ const ListsScreen = () => {
                             </TouchableOpacity>
 
                         )} />
-                    <BottomButtonLists username={username} />
+                    <BottomButtonLists username={username} handleSortTypeChange={handleSortTypeChange} currentSortType={currentSortType} />
 
                     {selectedItem && (
                         <ItemDetailView

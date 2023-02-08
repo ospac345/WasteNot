@@ -19,12 +19,12 @@ exports.listAll = function (req, res) {
 };
 
 exports.addEntry = function (req, res) {
-    console.log('console log from controller class ', req.body);
     const item = {
         name: req.body.name,
         quantity: req.body.quantity,
         unit: req.body.unit,
         expiration_date: req.body.expiration_date,
+        added_date: req.body.added_date,
         category: req.body.category,
         location: req.body.location,
         notes: req.body.notes

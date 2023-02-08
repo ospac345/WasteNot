@@ -4,7 +4,15 @@ import ComponentsStyleSheet from '../styleSheet/componentsStyleSheet';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SortItems = (props) => {
-    const [sortBy, setSortBy] = useState('date');
+
+
+
+    const sortTypeBackgroundColor = (sortType) => {
+        if (sortType === props.currentSortType) {
+            return { backgroundColor: '#698834' };
+        }
+        return {};
+    };
 
     return (
         <>
@@ -14,28 +22,29 @@ const SortItems = (props) => {
                 left: 0,
                 right: 0,
                 backgroundColor: '#888334',
-                padding: 10,
-                elevation: 5,
-                shadowColor: 'black',
-                shadowOffset: { width: 0, height: 5 },
-                shadowOpacity: 0.5,
-                shadowRadius: 5
+                padding: 8,
+
             }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Sort by</Text>
 
                     <TouchableOpacity style={[ComponentsStyleSheet.BottomButton]} onPress={props.handleSortMenu}>
-                        <MaterialCommunityIcons style={[{ color: '#696969' }]} name={"close-box"} size={15} />
+                        <Text style={{ color: 'gray' }}>Close</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
-                    <TouchableOpacity style={[ComponentsStyleSheet.BottomButton]} onPress={() => setSortBy('date')}>
-                        <Text style={[{ color: 'green' }]}><MaterialCommunityIcons name={"sort-alphabetical-ascending"} size={15} /> Sort by name</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[ComponentsStyleSheet.BottomButton]} onPress={() => setSortBy('name')}>
 
-                        <Text style={[{ color: 'red' }]}><MaterialCommunityIcons name={"calendar-range"} size={15} /> Sort by expiry</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
+                    <TouchableOpacity style={[ComponentsStyleSheet.BottomButton, sortTypeBackgroundColor('name')]} onPress={() => props.handleSortTypeChange('name')}>
+                        <Text ><MaterialCommunityIcons name={"sort-alphabetical-ascending"} size={15} /> Name</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[ComponentsStyleSheet.BottomButton, sortTypeBackgroundColor('date')]} onPress={() => props.handleSortTypeChange('date')}>
+                        <Text ><MaterialCommunityIcons name={"calendar-range"} size={15} /> Expiry</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[ComponentsStyleSheet.BottomButton, sortTypeBackgroundColor('addedOn')]} onPress={() => props.handleSortTypeChange('addedOn')}>
+                        <Text ><MaterialCommunityIcons name={"calendar-check"} size={15} /> Added</Text>
                     </TouchableOpacity>
                 </View>
+
             </View>
 
         </>

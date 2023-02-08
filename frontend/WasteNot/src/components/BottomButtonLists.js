@@ -23,7 +23,7 @@ const BottomButtonLists = (props) => {
             >
                 <Text style={[styles.buttonText, { paddingHorizontal: 20 }]}><MaterialCommunityIcons name="sort" /> Sort </Text>
             </TouchableOpacity>
-            {showSortMenu && <SortItems handleSortMenu={handleSortMenu} />}
+            {showSortMenu && <SortItems handleSortMenu={handleSortMenu} handleSortTypeChange={props.handleSortTypeChange} currentSortType={props.currentSortType} />}
         </View>
     );
 }

@@ -48,6 +48,15 @@ target 'WasteNot' do
     # Pods for testing
   end
 
+  target 'WasteNot' do
+    permissions_path = '../node_modules/react-native-permissions/ios'
+
+    pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+    pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+    pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
+    pod 'Permission-LocationAlwaysAndWhenInUse', :path => "#{permissions_path}/LocationAlwaysAndWhenInUse"
+  end
+
   post_install do |installer|
     react_native_post_install(
       installer,

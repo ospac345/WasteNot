@@ -24,7 +24,12 @@ const ComponentsStyleSheet = StyleSheet.create({
         paddingLeft: 15,
         borderWidth: 1,
         borderColor: '#698834',
-        margin: 3
+        margin: 3,
+        elevation: 3,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3
 
     },
     selectedButton: {
@@ -61,6 +66,7 @@ const ComponentsStyleSheet = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#698834',
         borderRadius: 5,
+        borderBottomWidth: 1,
         fontWeight: 'bold',
         fontSize: 20,
         textAlign: 'center'

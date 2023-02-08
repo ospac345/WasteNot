@@ -1,18 +1,22 @@
 import { View, TouchableOpacity, Text, Modal, Pressable, FlatList } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '../styleSheet/componentsStyleSheet';
 
-const CategoryModal = ({ onSelection }) => {
+const CategoryModal = ({ onSelection, selectedCategory }) => {
     const [categoryModalVisible, setCategoryModalVisible] = useState(false);
-    const [category, setCategory] = useState('Other');
+    const [category, setCategory] = useState(selectedCategory);
     const categories = ['Fruits', 'Vegetables', 'Other', 'Bakery', 'Beverages', 'Canned Goods', 'Dairy', 'Deli', 'Frozen', 'Meat', 'Produce'];
 
+    useEffect(() => {
+        setCategory(selectedCategory);
+    }, [selectedCategory]);
 
     const Category = ({ item, onPress, backgroundColor, textColor }) => (
         <TouchableOpacity onPress={onPress} style={[styles.QuantityModalViewItems, { backgroundColor }]}>
             <Text style={[{ color: textColor }]}>{item}</Text>
         </TouchableOpacity>
     );
+
 
     const renderCategory = ({ item }) => {
         const backgroundColor = item === category ? '#698834' : 'transparent';
@@ -26,7 +30,6 @@ const CategoryModal = ({ onSelection }) => {
                 textColor={color}
             />
         );
-
 
     };
 
