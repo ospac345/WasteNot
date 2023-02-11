@@ -16,6 +16,7 @@ import {
 import {
     Colors
 } from 'react-native/Libraries/NewAppScreen';
+import LandingPage from './src/pages/LandingPage';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <>
 
             <MainScreen />
+
 
         </>
     );

@@ -110,9 +110,28 @@ class ListModel {
     };
 
 
+    addItemsToDonationList = (username, donation) => {
+        return new Promise((resolve, reject) => {
+            this.list.update({ username }, { $push: { donationList: donation } }, { upsert: false }, (err, numAffected) => {
+                if (err) {
+                    reject(err);
+                } else if (numAffected === 0) {
+                    reject(new Error("Username not found"));
+                } else {
+                    resolve(donation);
+                }
+            });
+        });
+    }
 
-
-
+    removeItemsFromDonationList = (username, donation) => {
+        return new Promise((resolve, reject) => {
+            this.list.update({ username }, { $pull: { donationList: { id: { $in: donation } } } }, { multi: true }, (err, numAffected) => {
+                if (err) return reject(err);
+                resolve(numAffected);
+            });
+        });
+    }
 
 
 }
