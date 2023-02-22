@@ -1,41 +1,55 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MainScreen from './src/pages/MainScreen';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator, View } from 'react-native';
 
 import {
     useColorScheme,
 } from 'react-native';
 
-import {
-    Colors
-} from 'react-native/Libraries/NewAppScreen';
 import LandingPage from './src/pages/LandingPage';
 
 
 function App() {
-    const isDarkMode = useColorScheme() === 'dark';
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    const logInSuccess = () => {
+        setIsLoggedIn(true);
     };
 
+    const logOutSuccess = () => {
+        setIsLoggedIn(false);
+    };
+
+    useEffect(() => {
+        const checkToken = async () => {
+            const token = await AsyncStorage.getItem('userToken');
+            if (token) {
+                setIsLoggedIn(true);
+            }
+            setIsLoading(false);
+        };
+        checkToken();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
+
     return (
-
         <>
-
-            <MainScreen />
-
-
+            {isLoggedIn ? (
+                <MainScreen logOutSuccess={logOutSuccess} />
+            ) : (
+                <LandingPage logInSuccess={logInSuccess} />
+            )}
         </>
     );
 }
-
 
 export default App;

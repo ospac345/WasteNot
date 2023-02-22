@@ -10,7 +10,8 @@ import DonateScreen from '../pages/DonateScreen';
 
 const Tab = createBottomTabNavigator();
 
-function BottomTabs() {
+function BottomTabs({ logOutSuccess }) {
+
   return (
 
     <Tab.Navigator
@@ -42,6 +43,7 @@ function BottomTabs() {
         }}
       />
       <Tab.Screen
+        initialParams={{ logOutSuccess }}
         name="Profile"
         component={ProfileScreen}
         options={{

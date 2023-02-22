@@ -1,4 +1,6 @@
 const nedb = require("nedb");
+const bcrypt = require("bcrypt");
+
 
 
 class UserModel {
@@ -16,10 +18,9 @@ class UserModel {
     registerUser(username, password, householdName) {
         let user = {
             username: username,
-            password: password,
             householdName: householdName
         };
-        //  console.log('coming from user Model registerUser', user)
+
         return new Promise((resolve, reject) => {
             this.userDb.findOne({ username: username }, (err, foundUser) => {
                 if (err) {
@@ -27,11 +28,18 @@ class UserModel {
                 } else if (foundUser) {
                     reject({ message: 'User with this username already exists' });
                 } else {
-                    this.userDb.insert(user, (error, doc) => {
+                    bcrypt.hash(password, 10, (error, hash) => {
                         if (error) {
                             reject(error);
                         } else {
-                            resolve(doc);
+                            user.password = hash;
+                            this.userDb.insert(user, (insertError, doc) => {
+                                if (insertError) {
+                                    reject(insertError);
+                                } else {
+                                    resolve(doc);
+                                }
+                            });
                         }
                     });
                 }
@@ -41,16 +49,24 @@ class UserModel {
 
 
 
+
     getUser(username, password) {
-        console.log('coming from user Model getUser', username, password);
         return new Promise((resolve, reject) => {
-            this.userDb.find({ username: username, password: password }, (err, docs) => {
+            this.userDb.findOne({ username: username }, (err, foundUser) => {
                 if (err) {
                     reject(err);
-                } else if (docs.length === 0) {
+                } else if (!foundUser) {
                     reject({ message: 'Incorrect username or password' });
                 } else {
-                    resolve(docs);
+                    bcrypt.compare(password, foundUser.password, (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else if (!result) {
+                            reject({ message: 'Incorrect username or password' });
+                        } else {
+                            resolve({ _id: foundUser._id, username: foundUser.username });
+                        }
+                    });
                 }
             });
         });

@@ -1,12 +1,23 @@
 const userDAO = require('../models/userModel');
 const user = new userDAO({ filename: 'user.db', autoload: true });
+const jwt = require('jsonwebtoken');
+
+
+
 
 // Path: backend/controllers/userController.js
 
 exports.registerUser = function (req, res) {
     user.registerUser(req.body.username, req.body.password, req.body.householdName)
         .then((result) => {
-            res.json(result);
+            const token = jwt.sign({
+                _id: result._id,
+                username: result.username
+            }, process.env.JWT_SECRET);
+
+            res.json({ token: token });
+
+
         })
         .catch((err) => {
             console.error("promise rejected with error: ", err);
@@ -26,7 +37,12 @@ exports.getUser = function (req, res) {
             if (result.length === 0) {
                 res.status(401).json({ error: 'Invalid username or password' });
             } else {
-                res.json(result);
+                const token = jwt.sign({
+                    _id: result._id,
+                    username: result.username
+                }, process.env.JWT_SECRET);
+                res.json({ token: token });
+
             }
         })
         .catch((err) => {

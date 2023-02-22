@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const LandingPage = () => {
+const LandingPage = (props) => {
     const [isLogin, setIsLogin] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [householdName, setHouseholdName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [userData, setUserData] = useState('')
+
 
     const toggleForm = () => {
         setIsLogin(!isLogin);
@@ -22,6 +23,15 @@ const LandingPage = () => {
         setUsername('');
         setPassword('');
         setHouseholdName('');
+    };
+
+    // Store the token in AsyncStorage
+    _storeToken = async (token) => {
+        try {
+            await AsyncStorage.setItem('userToken', token);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleSubmit = async () => {
@@ -46,8 +56,8 @@ const LandingPage = () => {
                 payload = { username, password, householdName };
             }
             const response = await axios.post(endpoint, payload);
-            console.log(response.data);
-            setUserData(response.data);
+            _storeToken(response.data.token);
+            props.logInSuccess();
             resetAll();
         } catch (error) {
             Alert.alert('Error', error.response.data.error);

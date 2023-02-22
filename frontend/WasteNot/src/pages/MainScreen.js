@@ -5,11 +5,11 @@ import ListContextProvider from '../context/ListContext';
 
 
 
-const MainScreen = () => {
+const MainScreen = (props) => {
     return (
         <ListContextProvider>
             <NavigationContainer>
-                <BottomTabs />
+                <BottomTabs logOutSuccess={props.logOutSuccess} />
             </NavigationContainer>
         </ListContextProvider>
     );
