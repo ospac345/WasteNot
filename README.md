@@ -62,3 +62,7 @@ npx react-native run-ios
 android: 
 cd frontend/WasteNot
 npx react-native run-android
+
+test user have already been created for testing purposes which can be accessed with:
+username: test4@test.com
+password: test
