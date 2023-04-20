@@ -6070,6 +6070,11 @@
   dependencies:
     "prop-types" "^15.8.1"
 
+"react-native-dialog-input@^1.0.8":
+  "integrity" "sha512-W9YNMt6r+rUUMDEkOR1WMuGfSJw97ujB8H1xp8TjJTOnYVSlsf4aEP6t+J8tVk3XZaDcTawXgDjxH6E1WVWRog=="
+  "resolved" "https://registry.npmjs.org/react-native-dialog-input/-/react-native-dialog-input-1.0.8.tgz"
+  "version" "1.0.8"
+
 "react-native-dropdown-picker@^5.4.4":
   "integrity" "sha512-MGsFc3Oi6Rc94WoJk3oOGfPe6IVscCrWn1DRCUDB508U4Wmd2b+EYONpsgiXQ89ESoBcOE3qQR6gkY2CVxoC+Q=="
   "resolved" "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.4.tgz"
@@ -6097,10 +6102,10 @@
   "resolved" "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-4.5.0.tgz"
   "version" "4.5.0"
 
-"react-native-screens@^3.19.0", "react-native-screens@>= 3.0.0":
-  "integrity" "sha512-Ehsmy7jr3H3j5pmN+/FqsAaIAD+k+xkcdePfLcg4rYRbN5X7fJPgaqhcmiCcZ0YxsU8ttsstP9IvRLNQuIkRRA=="
-  "resolved" "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.19.0.tgz"
-  "version" "3.19.0"
+"react-native-screens@^3.20.0", "react-native-screens@>= 3.0.0":
+  "integrity" "sha512-joWUKWAVHxymP3mL9gYApFHAsbd9L6ZcmpoZa6Sl3W/82bvvNVMqcfP7MeNqVCg73qZ8yL4fW+J/syusHleUgg=="
+  "resolved" "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.20.0.tgz"
+  "version" "3.20.0"
   dependencies:
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"

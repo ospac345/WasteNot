@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SERVER_URL } from '../constants/constants';
 
 
 const LandingPage = (props) => {
@@ -10,7 +11,6 @@ const LandingPage = (props) => {
     const [password, setPassword] = useState('');
     const [householdName, setHouseholdName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
 
     const toggleForm = () => {
         setIsLogin(!isLogin);
@@ -28,7 +28,10 @@ const LandingPage = (props) => {
     // Store the token in AsyncStorage
     _storeToken = async (token) => {
         try {
-            await AsyncStorage.setItem('userToken', token);
+            await AsyncStorage.multiSet([
+                ['userToken', token],
+                ['username', username],
+            ]);
         } catch (error) {
             console.error(error);
         }
@@ -49,10 +52,10 @@ const LandingPage = (props) => {
             let endpoint = '';
             let payload = {};
             if (isLogin) {
-                endpoint = 'http://localhost:3001/login';
+                endpoint = SERVER_URL + "/login";
                 payload = { username, password };
             } else {
-                endpoint = 'http://localhost:3001/register';
+                endpoint = SERVER_URL + '/register';
                 payload = { username, password, householdName };
             }
             const response = await axios.post(endpoint, payload);

@@ -28,6 +28,7 @@ const AddItemToToListModal = (props) => {
     const [showSuccess, setShowSuccess] = useState(false);
 
 
+
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     let current = selectedExpirationDate;
@@ -99,7 +100,7 @@ const AddItemToToListModal = (props) => {
                 <View style={styles.modalContainer}>
 
                     {showSuccess && (
-                        <Text style={{ position: 'absolute', top: 100 }}>Success! Item added</Text>
+                        <Text style={{ position: 'absolute', top: 100, color: 'brown', fontSize: 25 }}>Success! Item added</Text>
                     )}
 
                     <View style={{ position: 'relative' }}>
@@ -276,6 +277,7 @@ const AddItemToToListModal = (props) => {
                                 Alert.alert('Please choose a date other than today');
                             }
                             else {
+                                console.log('props username: ' + props.username);
                                 addItem(item, props.username);
                                 resetAll();
                                 setShowSuccess(true);

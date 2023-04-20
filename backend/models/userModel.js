@@ -48,8 +48,6 @@ class UserModel {
     }
 
 
-
-
     getUser(username, password) {
         return new Promise((resolve, reject) => {
             this.userDb.findOne({ username: username }, (err, foundUser) => {

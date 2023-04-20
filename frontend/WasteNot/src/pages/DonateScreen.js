@@ -4,15 +4,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DonateScreenNeeds from "../components/DonateScreenNeeds";
-import DonationItemsListModal from "../components/DonationItemsListModal";
-import openMap, { createMapLink } from 'react-native-open-maps';
+import openMap from 'react-native-open-maps';
+import DialogInput from 'react-native-dialog-input';
 
 const DonateScreen = () => {
     const [foodbanks, setFoodbanks] = useState([]);
-    const [postcode, setPostcode] = useState('');
+    const [postcode, setPostcode] = useState('G4 0BA');
     const [showNeeds, setShowNeeds] = useState(true);
     const [needs, setNeeds] = useState('');
     const [selectedFoodbankIndex, setSelectedFoodbankIndex] = useState(-1);
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
 
     // Function to store postcode in local storage
     const storePostcode = async (postcode) => {
@@ -65,85 +66,102 @@ const DonateScreen = () => {
         openMap({ latitude: latitudeParsed, longitude: longitudeParsed, query: query, zoom: 0 });
     };
 
-    const changePostcode = () => {
-        Alert.prompt(
-            'Enter Postcode',
-            'Enter your postcode to find nearest food banks',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-                {
-                    text: 'OK',
-                    onPress: (postcode) => {
-                        if (!postcode) return;
-                        setPostcode(postcode);
-                        storePostcode(postcode);
-                    },
-                },
-            ],
-        );
+    const showDialog = () => {
+        setIsDialogVisible(true);
     };
 
+    const handleDialogCancel = () => {
+        setIsDialogVisible(false);
+    };
+
+    const handleDialogSubmit = (inputText) => {
+        if (!inputText) return;
+        setPostcode(inputText);
+        storePostcode(inputText);
+        setIsDialogVisible(false);
+    };
+
+    // const changePostcode = () => {
+    //     Alert.prompt(
+    //         'Enter Postcode',
+    //         'Enter your postcode to find nearest food banks',
+    //         [
+    //             {
+    //                 text: 'Cancel',
+    //                 style: 'cancel',
+    //             },
+    //             {
+    //                 text: 'OK',
+    //                 onPress: (postcode) => {
+    //                     if (!postcode) return;
+    //                     setPostcode(postcode);
+    //                     storePostcode(postcode);
+    //                 },
+    //             },
+    //         ],
+    //     );
+    // };
+
     return (
-        <View style={styles.container}>
-            {postcode ? (
+        <><View>
+            <DialogInput
+                isDialogVisible={isDialogVisible}
+                title={'Enter Postcode'}
+                message={'Enter your postcode to find nearest food banks'}
+                hintInput={'Postcode'}
+                submitInput={handleDialogSubmit}
+                closeDialog={handleDialogCancel} />
+        </View>
+
+            <View style={styles.container}>
+
                 <View style={styles.postcodeContainer}>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.postcodeText}><MaterialCommunityIcons size={25} name="map-marker" /> {postcode}</Text>
                         <TouchableOpacity
                             style={styles.postcodeButton}
-                            onPress={changePostcode}>
+                            onPress={showDialog}>
                             <Text style={styles.postcodeButtonText}>Change</Text>
                         </TouchableOpacity>
                     </View>
-                    <DonationItemsListModal />
                 </View>
-            ) : (
-                <Button
-                    title="Enter Postcode"
-                    onPress={changePostcode}
-                />
-            )}
-            <Text style={styles.title}>Foodbanks</Text>
-            <FlatList
-                style={styles.flatList}
-                data={foodbanks}
-                keyExtractor={item => item.slug}
-                renderItem={({ item, index }) => (
-                    <View style={styles.itemContainer}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.foodbankName}>{item.name}</Text>
-                            <TouchableOpacity onPress={() => Linking.openURL(item.urls.homepage)}>
-                                <MaterialCommunityIcons style={{ marginLeft: 5, color: '#698834' }} size={20} name="open-in-new" />
-                            </TouchableOpacity>
+                <Text style={styles.title}>Foodbanks</Text>
+                <FlatList
+                    style={styles.flatList}
+                    data={foodbanks}
+                    keyExtractor={item => item.slug}
+                    renderItem={({ item, index }) => (
+                        <View style={styles.itemContainer}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.foodbankName}>{item.name}</Text>
+                                <TouchableOpacity onPress={() => Linking.openURL(item.urls.homepage)}>
+                                    <MaterialCommunityIcons style={{ marginLeft: 5, color: '#698834' }} size={20} name="open-in-new" />
+                                </TouchableOpacity>
+
+                            </View>
+                            <Text style={styles.foodbankAddress}>{item.address}</Text>
+                            <Text style={styles.foodbankDistance}>
+                                Distance: {item.distance_mi} miles
+                            </Text>
+
+                            <View style={styles.foodBankLinks}>
+                                <TouchableOpacity onPress={() => handlePress(item.lat_lng.split(",")[0], item.lat_lng.split(",")[1], item.name)}>
+                                    <Text style={styles.foodbankDirections}>Directions</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setDonationNeeds(item.needs.needs, index)}>
+
+                                    <Text style={styles.foodbankDirections}>Needs <MaterialCommunityIcons size={18} name="arrow-down-drop-circle-outline" /></Text>
+
+                                </TouchableOpacity>
+                            </View>
+
+                            {showNeeds && selectedFoodbankIndex === index && needs && (
+                                <DonateScreenNeeds needs={needs} />
+                            )}
 
                         </View>
-                        <Text style={styles.foodbankAddress}>{item.address}</Text>
-                        <Text style={styles.foodbankDistance}>
-                            Distance: {item.distance_mi} miles
-                        </Text>
-
-                        <View style={styles.foodBankLinks}>
-                            <TouchableOpacity onPress={() => handlePress(item.lat_lng.split(",")[0], item.lat_lng.split(",")[1], item.name)}>
-                                <Text style={styles.foodbankDirections}>Directions</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setDonationNeeds(item.needs.needs, index)}>
-
-                                <Text style={styles.foodbankDirections}>Needs <MaterialCommunityIcons size={18} name="arrow-down-drop-circle-outline" /></Text>
-
-                            </TouchableOpacity>
-                        </View>
-
-                        {showNeeds && selectedFoodbankIndex === index && needs && (
-                            <DonateScreenNeeds needs={needs} />
-                        )}
-
-                    </View>
-                )}
-            />
-        </View>
+                    )} />
+            </View></>
     );
 };
 

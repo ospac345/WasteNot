@@ -10,25 +10,31 @@ import ComponentsStyleSheet from '../styleSheet/componentsStyleSheet';
 
 
 const ListsScreen = () => {
-    const { lists, removeItems } = useContext(ListContext);
+    const { lists, removeItems, username } = useContext(ListContext);
     const [selectedValue, setSelectedValue] = useState('myKitchen');
-    const [isLoading, setIsLoading] = useState(true);
-    const [username, setUsername] = useState('');
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
     const [filteredItems, setFilteredItems] = useState();
     const [currentSortType, setCurrentSortType] = useState('date');
 
 
+
     useEffect(() => {
-        if (!lists || !lists[0] || !lists[0].items) {
-            setIsLoading(true);
-            return;
+        if (lists) {
+            filteredList();
         }
-        setIsLoading(false);
-        setUsername(lists[0].username);
-        filteredList();
+
     }, [lists, selectedValue]);
+
+    const filteredList = () => {
+        if (lists) {
+            if (selectedValue === 'myKitchen') {
+                setFilteredItems(lists.items);
+            } else {
+                setFilteredItems(lists.items.filter(item => item.location === selectedValue));
+            }
+        }
+    };
 
     const Capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -38,14 +44,6 @@ const ListsScreen = () => {
     };
 
     const handleSelectedValue = value => setSelectedValue(value);
-
-    const filteredList = () => {
-        if (selectedValue === 'myKitchen') {
-            setFilteredItems(lists[0].items);
-        } else {
-            setFilteredItems(lists[0].items.filter(item => item.location === selectedValue));
-        }
-    };
 
 
     const handleRemoveItems = () => {
@@ -72,82 +70,83 @@ const ListsScreen = () => {
 
     return (
         <>
-            {isLoading ? (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>Loading...</Text>
-                </View>
-            ) : (
-                <>
-                    <ListsTopFilter onValueChange={handleSelectedValue} />
-                    <FlatList
-                        data={filteredItems}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                style={{
-                                    backgroundColor: 'white',
-                                    borderRadius: 10,
-                                    padding: 10,
-                                    margin: 10,
-                                    shadowColor: '#000',
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 2,
-                                    },
-                                    shadowOpacity: 0.25,
-                                    shadowRadius: 2,
-                                    elevation: 2.5
-                                }}
-                                onPress={() => setSelectedItem(item)}
 
-                            >
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={ListsStyleSheet.itemName}>{Capitalize(item.name)}</Text>
-                                    <Text style={ListsStyleSheet.itemLocation}>{item.location === 'pantry' ? 'My Pantry' : item.location === 'fridge' ? 'My Fridge' : item.location === 'freezer' ? 'My Freezer' : item.location}</Text>
-                                </View>
+            <>
+                <ListsTopFilter onValueChange={handleSelectedValue} />
+                <FlatList
+                    data={filteredItems}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: 'white',
+                                borderRadius: 10,
+                                padding: 10,
+                                margin: 10,
+                                shadowColor: '#000',
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 2,
+                                },
+                                shadowOpacity: 0.25,
+                                shadowRadius: 2,
+                                elevation: 2.5
+                            }}
+                            onPress={() => setSelectedItem(item)}
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={ListsStyleSheet.expirationDays}>
-                                        {DaysCalculator(item.expiration_date) > 0
-                                            ? `Expires in ${DaysCalculator(item.expiration_date)} days`
-                                            : "Expired"}
-                                    </Text>
+                        >
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={ListsStyleSheet.itemName}>{Capitalize(item.name)}</Text>
+                                <Text style={ListsStyleSheet.itemLocation}>{item.location === 'pantry' ? 'My Pantry' : item.location === 'fridge' ? 'My Fridge' : item.location === 'freezer' ? 'My Freezer' : item.location}</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={ListsStyleSheet.expirationDays}>
+                                    {DaysCalculator(item.expiration_date) > 0
+                                        ? `Expires in ${DaysCalculator(item.expiration_date)} days`
+                                        : "Expired"}
+                                </Text>
 
 
-                                </View>
+                            </View>
 
-                                <View style={{ alignItems: "flex-end" }}>
-                                    <TouchableOpacity onPress={() => {
-                                        if (selectedIds.includes(item.id)) {
-                                            setSelectedIds(selectedIds.filter(id => id !== item.id));
-                                        } else {
-                                            setSelectedIds([...selectedIds, item.id]);
-                                        }
-                                    }}>
-                                        <MaterialCommunityIcons
-                                            style={ListsStyleSheet.listCheckCircleIcon}
-                                            name={selectedIds.includes(item.id) ? "check-circle" : "checkbox-blank-circle-outline"}
-                                            size={25}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
+                            <View style={{ alignItems: "flex-end" }}>
+                                <TouchableOpacity onPress={() => {
+                                    if (selectedIds.includes(item.id)) {
+                                        setSelectedIds(selectedIds.filter(id => id !== item.id));
+                                    } else {
+                                        setSelectedIds([...selectedIds, item.id]);
+                                    }
+                                }}>
+                                    <MaterialCommunityIcons
+                                        style={ListsStyleSheet.listCheckCircleIcon}
+                                        name={selectedIds.includes(item.id) ? "check-circle" : "checkbox-blank-circle-outline"}
+                                        size={25}
+                                    />
+                                </TouchableOpacity>
+                            </View>
 
 
-                            </TouchableOpacity>
+                        </TouchableOpacity>
 
-                        )} />
-                    <BottomButtonLists username={username} handleSortTypeChange={handleSortTypeChange} currentSortType={currentSortType} />
+                    )} />
 
-                    {selectedItem && (
-                        <ItemDetailView
-                            selectedItem={selectedItem}
-                            username={username}
-                            onClose={() => setSelectedItem(null)}
+                {((lists.items === undefined) || (lists.items.length === 0)) && <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>No items in your kitchen...</Text>
+                </View>}
+                <BottomButtonLists username={username} handleSortTypeChange={handleSortTypeChange} currentSortType={currentSortType} />
 
-                        />
-                    )}
-                </>
-            )}
+                {selectedItem && (
+                    <ItemDetailView
+                        selectedItem={selectedItem}
+                        username={username}
+                        onClose={() => setSelectedItem(null)}
+
+                    />
+                )}
+            </>
+
             {selectedIds.length > 0 && (
                 <View style={{
                     position: 'absolute',
@@ -169,7 +168,7 @@ const ListsScreen = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
-                        <TouchableOpacity style={[ComponentsStyleSheet.BottomButton]} onPress={() => handleConsumed()}>
+                        <TouchableOpacity style={[ComponentsStyleSheet.BottomButton]} onPress={() => handleRemoveItems()}>
                             <Text style={[{ color: 'green' }]}><MaterialCommunityIcons name={"check"} size={15} /> Consumed</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[ComponentsStyleSheet.BottomButton]} onPress={() => handleRemoveItems()}>

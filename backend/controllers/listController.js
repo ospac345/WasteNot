@@ -9,8 +9,9 @@ exports.newList = function (req, res) {
 };
 
 exports.listAll = function (req, res) {
-    list.getEntriesForUser('test@test.com')
+    list.getEntriesForUser(req.body.username)
         .then((list) => {
+            console.log("promise resolved, list", list);
             res.json(list);
         })
         .catch((err) => {

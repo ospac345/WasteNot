@@ -2,12 +2,10 @@ const userDAO = require('../models/userModel');
 const user = new userDAO({ filename: 'user.db', autoload: true });
 const jwt = require('jsonwebtoken');
 
-
-
-
 // Path: backend/controllers/userController.js
 
 exports.registerUser = function (req, res) {
+    console.log('from userController.js RegisterUser', req.body)
     user.registerUser(req.body.username, req.body.password, req.body.householdName)
         .then((result) => {
             const token = jwt.sign({
@@ -32,6 +30,7 @@ exports.registerUser = function (req, res) {
 
 
 exports.getUser = function (req, res) {
+    console.log('from userController.js', req.body)
     user.getUser(req.body.username, req.body.password)
         .then((result) => {
             if (result.length === 0) {

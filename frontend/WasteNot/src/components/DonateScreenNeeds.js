@@ -7,50 +7,42 @@ const DonateScreenNeeds = ({ needs }) => {
     const { lists } = useContext(ListContext);
     const [result, setResult] = useState({});
 
+
     useEffect(() => {
-        if (needs === 'Unknown' || !needs) {
+        if (needs === 'Unknown' || !needs || !lists) {
             setResult({});
-            return;
+        } else {
+
+            const needsList = needs.split("\n");
+            const needsArray = needsList.reduce((acc, item) => {
+                acc[item] = lists.items.some(apiItem =>
+                    apiItem.name.toLowerCase().includes(item.toLowerCase())
+                );
+                return acc;
+            }, {});
+
+
+            setResult(needsArray);
+            //console.log('needsArray log', needsArray);
         }
-
-        if (!lists || !lists.length) {
-            setResult({});
-            return;
-        }
-
-
-        const needsList = needs.split("\n");
-
-        const result = {};
-        for (const item of needsList) {
-            result[item] = false;
-            for (const apiItem of lists[0].items) {
-                if (apiItem.name.toLowerCase().includes(item.toLowerCase())) {
-                    result[item] = true;
-                    break;
-                }
-            }
-        }
-
-        setResult(result);
     }, [needs, lists]);
 
 
     return (
         <View style={Styles.needsContainer}>
             {needs === 'Unknown' || !needs ? (
-                <Text style={{ color: 'red' }}>
+                <Text style={{ color: 'black' }}>
                     No needs published yet! Please check later. Thanks
                 </Text>
             ) : (
                 <View>
                     {Object.keys(result).length === 0 ? (
-                        <Text style={{ color: 'red' }}>
+                        <Text style={{ color: 'black' }}>
                             Loading...
                         </Text>
                     ) : (
                         Object.keys(result).map((item, index) => (
-                            <Text key={index} style={{ color: result[item] ? 'white' : 'black' }}>
+                            <Text key={index} style={{ color: result[item] ? 'white' : 'black', fontSize: 14, fontWeight: 'bold' }}>
                                 {`${item} ${result[item] ? '- Available in my kitchen' : ''}`}
                             </Text>
                         ))

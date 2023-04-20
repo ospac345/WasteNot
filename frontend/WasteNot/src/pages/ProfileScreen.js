@@ -31,14 +31,15 @@ function ProfileScreen({ route }) {
         );
     };
 
-
     return (
         <>
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Text>Profile Page</Text>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 20, padding: 10 }}>Hi Test Household!</Text>
                 <TouchableOpacity onPress={() => logout()}>
-                    <Text>Logout</Text>
+                    <Text style={{ color: 'green', padding: 10 }}>Logout</Text>
                 </TouchableOpacity>
+
+                <Text style={{ fontSize: 10, padding: 10, color: 'grey' }}>App developed for GCU by Syed Faisal Imam</Text>
             </View>
         </>
 

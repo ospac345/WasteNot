@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require("../controllers/listController");
 const userController = require("../controllers/userController");
 
-router.get("/api", controller.listAll);
+router.post("/api", controller.listAll);
 router.get("/new", controller.newList);
 router.post("/api/addNewEntry", controller.addEntry);
 router.post("/api/remove", controller.removeEntry);

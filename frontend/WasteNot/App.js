@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import MainScreen from './src/pages/MainScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator, View } from 'react-native';
-
-import {
-    useColorScheme,
-} from 'react-native';
-
 import LandingPage from './src/pages/LandingPage';
 
 

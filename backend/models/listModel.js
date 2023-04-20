@@ -45,15 +45,24 @@ class ListModel {
 
     getEntriesForUser(username) {
         return new Promise((resolve, reject) => {
-            this.list.find({ username: username }, (err, docs) => {
+            this.list.findOne({ username }, (err, doc) => {
                 if (err) {
                     reject(err);
+                } else if (!doc) { // User not found, create a new entry
+                    this.list.insert({ username, items: [] }, (err, newDoc) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(newDoc);
+                        }
+                    });
                 } else {
-                    resolve(docs);
+                    resolve(doc);
                 }
             });
         });
     }
+
 
 
 
